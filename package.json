@@ -1,6 +1,6 @@
 {
   "name": "vue-countdown",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "A Vue.js countdown component",
   "author": "Mangi <duxiaoxue93@gmail.com>",
   "private": true,
