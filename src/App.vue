@@ -1,17 +1,19 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <hello></hello>
+    <countdown :now-time="0" :end-time="60 + 1"></countdown><br>
+    <countdown :now-time="0" :end-time="60 * 60 + 1"></countdown><br>
+    <countdown :now-time="0" :end-time="60 * 60 * 24 + 1"></countdown><br>
+    <countdown :now-time="0" :end-time="60 * 60 * 24 * 10 + 1"></countdown><br>
   </div>
 </template>
 
 <script>
-import Hello from './components/Hello'
+import Countdown from './components/count-down'
 
 export default {
   name: 'app',
   components: {
-    Hello
+    Countdown
   }
 }
 </script>
