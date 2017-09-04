@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import Countdown from './components/count-down'
+import Countdown from '../src/countdown/index'
 
 export default {
   name: 'app',

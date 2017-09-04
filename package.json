@@ -8,6 +8,7 @@
     "dev": "node build/dev-server.js",
     "start": "node build/dev-server.js",
     "build": "node build/build.js",
+    "build:demo": "NODE_ENV=demo node build/build.js",
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
@@ -65,5 +66,19 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ]
+  ],
+  "main": "dist/vue-countdown.min.js",
+  "keywords": [
+    "vue",
+    "countdown"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/MangiDu/vue-countdown.git"
+  },
+  "bugs": {
+    "url": "https://github.com/MangiDu/vue-countdown/issues"
+  },
+  "homepage": "https://github.com/MangiDu/vue-countdown#readme"
 }
