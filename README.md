@@ -2,20 +2,49 @@
 
 > A Vue.js countdown component
 
-## Build Setup
+## Install
 
 ``` bash
-# install dependencies
-npm install
-
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
+npm install vue-countdown-component
 ```
 
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+## Usage
+```vue
+<template>
+  <div>
+    <vue-countdown :now-time="0" :end-time="200" @end="onEnd"></vue-countdown>
+  </div>
+</template>
+
+<script>
+import VueCountdown from 'vue-countdown-component'
+
+export default {
+  components: {
+    VueCountdown
+  },
+  data () {
+    return {}
+  },
+  methods: {
+    onEnd () {
+      // do something when countdown ended
+    }
+  }
+}
+</script>
+
+<style>
+@import "vue-countdown-component/dist/vue-countdown.min.css";
+</style>
+```
+
+## Props
+
+`nowTime`: unit is second, not required, set current time seconds as default
+
+`endTime`: unit is second, required
+
+## Events
+
+`end`
