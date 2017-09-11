@@ -25,6 +25,10 @@ export default {
     maxValue: {
       type: Number,
       default: 10
+    },
+    frequency: { // 定时器频率
+      type: Number,
+      default: 16
     }
   },
   data () {
@@ -35,9 +39,7 @@ export default {
       current: 0,
       base: 100, // 百分比，与number-item的height保持一致
       duration: 500,
-      speed: 2,
-      // 不希望被改变的
-      frequency: 16 // 定时器频率
+      speed: 2
     }
   },
   computed: {
@@ -114,12 +116,7 @@ export default {
 }
 </script>
 
-<style scoped>
-ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
+<style>
 .counter-wrapper {
   display: inline-block;
   width: 10px;
@@ -138,10 +135,14 @@ ul {
   top: -100%;
   left: 0;
   height: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 .counter-wrapper .number-item {
   display: inline-block;
-  width: 10px;
+  width: 100%;
   height: 100%;
+  text-align: center;
 }
 </style>

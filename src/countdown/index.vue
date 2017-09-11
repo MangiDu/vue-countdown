@@ -4,7 +4,7 @@
       <template v-if="mode !== 'seconds'">
         <span class="counter">
           <template v-for="(value, index) in days">
-            <number-counter :value="Number(value)"></number-counter>
+            <number-counter :value="Number(value)" :frequency="smooth"></number-counter>
           </template>
         </span>
         <span class="day-time">
@@ -14,20 +14,20 @@
         </span>
         <span class="counter">
           <template v-for="(value, index) in hours">
-            <number-counter :value="Number(value)" :max-value="index === 0 ? 3 : 10"></number-counter>
+            <number-counter :value="Number(value)" :frequency="smooth" :max-value="index === 0 ? 3 : 10"></number-counter>
           </template>
         </span>
         <span>:</span>
         <span class="counter">
           <template v-for="(value, index) in minutes">
-            <number-counter :value="Number(value)" :max-value="index === 0 ? 6 : 10"></number-counter>
+            <number-counter :value="Number(value)" :frequency="smooth" :max-value="index === 0 ? 6 : 10"></number-counter>
           </template>
         </span>
         <span>:</span>
       </template>
       <span class="counter">
         <template v-for="(value, index) in seconds">
-          <number-counter :value="Number(value)" :max-value="(mode !== 'seconds' && index === 0) ? 6 : 10"></number-counter>
+          <number-counter :value="Number(value)" :frequency="smooth" :max-value="(mode !== 'seconds' && index === 0) ? 6 : 10"></number-counter>
         </template>
       </span>
     </div>
@@ -62,6 +62,10 @@ export default {
     },
     dayText: {
       type: Object
+    },
+    frames: { // range:  1 - 24
+      type: Number,
+      default: 16
     }
   },
   data () {
@@ -74,6 +78,9 @@ export default {
   computed: {
     leftSeconds () {
       return Math.max(this.endTime - this.now, 0)
+    },
+    smooth () {
+      return Number.parseInt(Math.min(Math.max(this.frames, 1), 24))
     },
     days () {
       let result = ''
@@ -148,25 +155,25 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .count-down-container {
   display: inline-block;
   height: 32px;
 }
-.left-time {
+.count-down-container .left-time {
   display: inline-block;
 }
 
-.left-time .counter {
+.count-down-container .left-time .counter {
   position: relative;
   top: 4px;
 }
-.left-time span:not(.counter) {
+.count-down-container .left-time span:not(.counter) {
   position: relative;
   top: -2px;
 }
 
-.counter {
+.count-down-container .counter {
   position: relative;
   top: 2px;
   display: inline-block;
@@ -179,7 +186,7 @@ export default {
   text-align: center;
   line-height: 24px;
 }
-.day-time {
+.count-down-container .day-time {
   display: inline-block;
   min-width: 10px;
 }
