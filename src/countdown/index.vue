@@ -6,7 +6,11 @@
           <number-counter :value="Number(value)"></number-counter>
         </template>
       </span>
-      <span>{{ Number(days) > 1 ? dayText.plural : dayText.singular }}</span>
+      <span class="day-time">
+        <template v-if="dayText">
+          {{ Number(days) > 1 ? dayText.plural : dayText.singular }}
+        </template>
+      </span>
       <span class="counter">
         <template v-for="(value, index) in hours">
           <number-counter :value="Number(value)" :max-value="index === 0 ? 3 : 10"></number-counter>
@@ -41,13 +45,13 @@ export default {
       default: Math.floor(Date.now() / 1000)
     },
     dayText: {
-      type: Object,
-      default () {
-        return {
-          singular: 'day',
-          plural: 'days'
-        }
-      }
+      type: Object
+      // default () {
+      //   return {
+      //     singular: '天',
+      //     plural: '天'
+      //   }
+      // }
     }
   },
   data () {
@@ -162,5 +166,9 @@ export default {
   background-color: #f8f8f8;
   text-align: center;
   line-height: 24px;
+}
+.day-time {
+  display: inline-block;
+  min-width: 10px;
 }
 </style>
