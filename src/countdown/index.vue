@@ -61,7 +61,13 @@ export default {
       default: 'default' // seconds
     },
     dayText: {
-      type: Object
+      type: Object,
+      default () {
+        return {
+          plural: 'days',
+          singular: 'day'
+        }
+      }
     },
     frames: { // range:  1 - 24
       type: Number,
