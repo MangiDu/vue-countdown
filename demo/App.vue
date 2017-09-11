@@ -1,9 +1,8 @@
 <template>
   <div id="app">
-    <countdown :now-time="0" :end-time="60 + 1"></countdown><br>
-    <countdown :now-time="0" :end-time="60 * 60 + 1"></countdown><br>
+    <countdown v-show="!isEnd" :now-time="0" :end-time="12" @end="isEnd = true" :frames="24"></countdown><br>
+    <span>left </span><countdown :now-time="0" :end-time="60 * 60" mode="seconds"></countdown><span> seconds</span><br>
     <countdown :now-time="0" :end-time="60 * 60 * 24 + 1"></countdown><br>
-    <countdown :now-time="0" :end-time="60 * 60 * 24 * 10 + 1"></countdown><br>
   </div>
 </template>
 
@@ -14,6 +13,11 @@ export default {
   name: 'app',
   components: {
     Countdown
+  },
+  data () {
+    return {
+      isEnd: false
+    }
   }
 }
 </script>

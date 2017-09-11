@@ -41,9 +41,15 @@ export default {
 
 ## Props
 
-`nowTime`: unit is second, not required, set current time seconds as default
+`nowTime`: (Number) unit is second, not required, set current time seconds as default
 
-`endTime`: unit is second, required
+`endTime`: (Number) unit is second, required
+
+`mode`: (String) `default` or `seconds`, seconds only show seconds counts
+
+`dayText`: (Object) `{plural: 'days', singular: 'day'}`
+
+`frames`: (Number) 1 - 24, default 16
 
 ## Events
 
