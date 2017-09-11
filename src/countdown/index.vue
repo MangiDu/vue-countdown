@@ -1,31 +1,33 @@
 <template lang="html">
   <div class="count-down-container">
     <div class="left-time">
-      <span class="counter">
-        <template v-for="(value, index) in days">
-          <number-counter :value="Number(value)"></number-counter>
-        </template>
-      </span>
-      <span class="day-time">
-        <template v-if="dayText">
-          {{ Number(days) > 1 ? dayText.plural : dayText.singular }}
-        </template>
-      </span>
-      <span class="counter">
-        <template v-for="(value, index) in hours">
-          <number-counter :value="Number(value)" :max-value="index === 0 ? 3 : 10"></number-counter>
-        </template>
-      </span>
-      <span>:</span>
-      <span class="counter">
-        <template v-for="(value, index) in minutes">
-          <number-counter :value="Number(value)" :max-value="index === 0 ? 6 : 10"></number-counter>
-        </template>
-      </span>
-      <span>:</span>
+      <template v-if="mode !== 'seconds'">
+        <span class="counter">
+          <template v-for="(value, index) in days">
+            <number-counter :value="Number(value)"></number-counter>
+          </template>
+        </span>
+        <span class="day-time">
+          <template v-if="dayText">
+            {{ Number(days) > 1 ? dayText.plural : dayText.singular }}
+          </template>
+        </span>
+        <span class="counter">
+          <template v-for="(value, index) in hours">
+            <number-counter :value="Number(value)" :max-value="index === 0 ? 3 : 10"></number-counter>
+          </template>
+        </span>
+        <span>:</span>
+        <span class="counter">
+          <template v-for="(value, index) in minutes">
+            <number-counter :value="Number(value)" :max-value="index === 0 ? 6 : 10"></number-counter>
+          </template>
+        </span>
+        <span>:</span>
+      </template>
       <span class="counter">
         <template v-for="(value, index) in seconds">
-          <number-counter :value="Number(value)" :max-value="index === 0 ? 6 : 10"></number-counter>
+          <number-counter :value="Number(value)" :max-value="(mode !== 'seconds' && index === 0) ? 6 : 10"></number-counter>
         </template>
       </span>
     </div>
@@ -34,6 +36,16 @@
 
 <script>
 import NumberCounter from './number-counter'
+
+const MINUTE_SECONDS = 60
+const HOUR_MINUTES = 60
+const DAY_HOURS = 24
+
+const HOUR_SECONDS = MINUTE_SECONDS * HOUR_MINUTES
+const DAY_SECONDS = HOUR_SECONDS * DAY_HOURS
+
+const SECOND_MILIS = 1000
+
 export default {
   props: {
     endTime: {
@@ -42,33 +54,34 @@ export default {
     },
     nowTime: {
       type: Number,
-      default: Math.floor(Date.now() / 1000)
+      default: Math.floor(Date.now() / SECOND_MILIS)
+    },
+    mode: {
+      type: String,
+      default: 'default' // seconds
     },
     dayText: {
       type: Object
-      // default () {
-      //   return {
-      //     singular: '天',
-      //     plural: '天'
-      //   }
-      // }
     }
   },
   data () {
     return {
+      modeArr: [],
       now: null,
-      upsideDown: false,
       isClosed: true
     }
   },
   computed: {
+    leftSeconds () {
+      return Math.max(this.endTime - this.now, 0)
+    },
     days () {
       let result = ''
       if (this.now !== null) {
         if (this.hours === 0 && this.minutes === 0) {
-          result = Math.ceil((this.endTime - this.now) / (60 * 60 * 24))
+          result = Math.ceil(this.leftSeconds / DAY_SECONDS)
         } else {
-          result = Math.floor((this.endTime - this.now) / (60 * 60 * 24))
+          result = Math.floor(this.leftSeconds / DAY_SECONDS)
         }
       }
       return this.getPadZeroStr(result)
@@ -77,31 +90,29 @@ export default {
       let result = ''
       if (this.now !== null) {
         if (this.minutes === 0) {
-          result = Math.ceil((this.endTime - this.now) / (60 * 60)) % 24
+          result = Math.ceil(this.leftSeconds / HOUR_SECONDS)
         } else {
-          result = Math.floor((this.endTime - this.now) / (60 * 60)) % 24
+          result = Math.floor(this.leftSeconds / HOUR_SECONDS)
         }
+        result %= DAY_HOURS
       }
       return this.getPadZeroStr(result)
     },
     minutes () {
       let result = ''
       if (this.now !== null) {
-        result = Math.floor((this.endTime - this.now) / 60) % 60
+        result = Math.floor(this.leftSeconds / MINUTE_SECONDS)
+        result %= MINUTE_SECONDS
       }
       return this.getPadZeroStr(result)
     },
     seconds () {
       let result = ''
       if (this.now !== null) {
-        result = Math.floor((this.endTime - this.now) % 60)
+        result = Math.floor(this.leftSeconds)
+        if (this.mode !== 'seconds') result %= MINUTE_SECONDS
       }
       return this.getPadZeroStr(result)
-    }
-  },
-  watch: {
-    minutes () {
-      this.upsideDown = !this.upsideDown
     }
   },
   mounted () {
@@ -161,6 +172,7 @@ export default {
   display: inline-block;
   min-width: 24px;
   height: 24px;
+  padding: 0 2px;
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 4px;
   background-color: #f8f8f8;

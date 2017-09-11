@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="counter-wrapper">
     <div class="place-wrapper">
-      <ul class="number-list" :style="{top: calculatedTop + 'px'}">
+      <ul class="number-list" :style="{transform: `translateY(${calculatedTop}%)`}">
         <li class="number-item">{{ prev }}</li>
         <li class="number-item">{{ current }}</li>
         <li class="number-item">{{ next }}</li>
@@ -33,7 +33,7 @@ export default {
       startFrom: 0,
       entTo: 0,
       current: 0,
-      base: 24, // 高度单位，与number-item的height保持一致
+      base: 100, // 百分比，与number-item的height保持一致
       duration: 500,
       speed: 2,
       // 不希望被改变的
@@ -69,12 +69,14 @@ export default {
     }
   },
   mounted () {
-    if (this.value) {
+    if (this.value !== undefined) {
       let value = Math.floor(this.value / Math.pow(10, this.bit - 1))
-      this.current = value % 10
+      this.endTo = value % 10
     } else {
-      this.current = 0
+      this.endTo = 0
     }
+    // 防止出现设置了值后不tick直接显示目标值的情况
+    this.startTick()
   },
   beforeDestroy () {
     if (this._interval) clearTimeout(this._interval)
@@ -83,13 +85,13 @@ export default {
     startTick () {
       let distance = this.endTo - this.current
       if (distance === 0 || distance === this.maxValue) return
-      let direction
-      if (Math.abs(distance) <= 1) {
-        direction = distance >= 0 ? -1 : 1 // top正值是向下
-      } else {
-        // 间距不为1的时候就始终从上往下滚
-        direction = 1
-      }
+      let direction = 1
+      // if (Math.abs(distance) <= 1) {
+      //   direction = distance >= 0 ? -1 : 1 // top正值是向下
+      // } else {
+      //   // 间距不为1的时候就始终从上往下滚
+      //   direction = 1
+      // }
       if (this._interval) {
         // 为了安全保证，先清掉setInterval
         clearTimeout(this._interval)
@@ -121,7 +123,7 @@ ul {
 .counter-wrapper {
   display: inline-block;
   width: 10px;
-  height: 24px;
+  height: 100%;
   margin: 0 auto;
 }
 .counter-wrapper .place-wrapper {
@@ -133,14 +135,13 @@ ul {
 .counter-wrapper .number-list {
   position: absolute;
   display: inline-block;
-  top: 0;
+  top: -100%;
   left: 0;
-  margin-top: -4px;
-  transform: translateY(-20px);
+  height: 100%;
 }
 .counter-wrapper .number-item {
   display: inline-block;
   width: 10px;
-  height: 24px;
+  height: 100%;
 }
 </style>
