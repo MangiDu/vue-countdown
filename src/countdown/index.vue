@@ -146,6 +146,9 @@ export default {
           }, 500)
         }
       }, 1000)
+    } else {
+      this.isClosed = true
+      this.$emit('end')
     }
   },
   beforeDestroy () {
